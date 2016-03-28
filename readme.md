@@ -4,7 +4,7 @@ Highlight.js for React
 
 `npm install --save react-hljs`
 
-# usage
+## usage
 ```js
 import React, { Component } from 'react'
 import Highlight from 'react-hljs'

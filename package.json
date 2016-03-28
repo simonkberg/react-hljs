@@ -1,6 +1,6 @@
 {
   "name": "react-hljs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Highlight.js for React",
   "main": "index.js",
   "scripts": {
@@ -51,5 +51,8 @@
   },
   "dependencies": {
     "highlight.js": "^9.2.0"
-  }
+  },
+  "files": [
+    "lib/react-hljs.js"
+  ]
 }
