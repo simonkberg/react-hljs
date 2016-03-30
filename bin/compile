@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+var del = require('del')
+var path = require('path')
+var babel = require('babel-core')
+var uglify = require('uglify-js')
+var archiver = require('archiver')
+
+var paths = {}
+
+paths.root = path.join(__dirname, '..')
+paths.lib = path.join(paths.root, 'lib')
+paths.src = path.join(paths.root, 'src')
+
+del.sync(paths.lib)
+
+var src = path.join(paths.src, 'Highlight.js')
+var dist = path.join(paths.lib, 'react-hljs.js')
+var result = babel.transformFileSync(src)
+
+fs.mkdirSync(paths.lib)
+fs.writeFileSync(dist, result.code)
+
+var distMin = path.join(paths.lib, 'react-hljs.min.js')
+var resultMin = uglify.minify(result.code, { fromString: true })
+
+fs.writeFileSync(distMin, resultMin.code)
+
+var license = path.join(paths.root, 'LICENSE')
+var readme = path.join(paths.root, 'readme.md')
+var release = [{
+  expand: true,
+  cwd: paths.root,
+  src: [
+    path.relative(paths.root, dist),
+    path.relative(paths.root, distMin),
+    path.relative(paths.root, license),
+    path.relative(paths.root, readme)
+  ]
+}]
+
+var zip = fs.createWriteStream(path.join(paths.lib, 'react-hljs.zip'))
+var zipArchive = archiver('zip')
+
+zipArchive.pipe(zip)
+zipArchive.bulk(release).finalize()
+
+var tgz = fs.createWriteStream(path.join(paths.lib, 'react-hljs.tar.gz'))
+var tgzArchive = archiver('tar', { gzip: true })
+
+tgzArchive.pipe(tgz)
+tgzArchive.bulk(release).finalize()
