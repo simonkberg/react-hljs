@@ -1,6 +1,6 @@
 {
   "name": "react-hljs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Highlight.js for React",
   "main": "index.js",
   "scripts": {
