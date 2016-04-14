@@ -9,7 +9,7 @@
     "build": "node bin/compile",
     "build:minify": "npm run build -- --minify",
     "build:release": "npm run build -- --release",
-    "prepublish": "npm run lint && npm test && npm run build:release"
+    "prepublish": "npm run build:release"
   },
   "jest": {
     "automock": false
