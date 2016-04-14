@@ -9,4 +9,4 @@ node_js:
   - "4.0"
 cache:
   directories:
-  - npm_modules
+  - node_modules
