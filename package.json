@@ -50,6 +50,7 @@
     "react": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
+    "uglify-js": "^2.6.2",
     "yargs": "^4.6.0"
   },
   "peerDependencies": {
