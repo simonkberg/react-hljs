@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import hljs from 'highlight.js'
+import { highlightBlock } from 'highlight.js'
 
 export default class Highlight extends Component {
   static propTypes = {
@@ -9,22 +9,23 @@ export default class Highlight extends Component {
 
   componentDidUpdate () {
     if (this._el) {
-      this._highlight(this._el)
+      highlightBlock(this._el)
     }
   }
 
-  _highlight = (el) => {
+  _ref = (el) => {
     this._el = el
 
-    hljs.highlightBlock(el)
+    if (el) {
+      highlightBlock(el)
+    }
   }
 
   render () {
     const { className, children } = this.props
-    const ref = this._highlight
 
     return (
-      <pre className={className} ref={ref}>
+      <pre className={className} ref={this._ref}>
         <code>{children}</code>
       </pre>
     )

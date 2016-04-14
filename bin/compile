@@ -1,11 +1,29 @@
 #!/usr/bin/env node
 
+var argv = require('yargs')
+  .usage('Usage: $0 [options]')
+  .help().alias('h', 'help')
+  .options({
+    minify: {
+      alias: 'm',
+      description: 'Minify compiled source',
+      type: 'boolean',
+      default: false
+    },
+    release: {
+      alias: 'r',
+      description: 'Create release archive',
+      type: 'boolean',
+      default: false
+    }
+  }).argv
+
+var path = require('path')
 var fs = require('fs')
 var del = require('del')
-var path = require('path')
 var babel = require('babel-core')
-var uglify = require('uglify-js')
 var archiver = require('archiver')
+var config = require('../package.json')
 
 var paths = {}
 
@@ -22,32 +40,38 @@ var result = babel.transformFileSync(src)
 fs.mkdirSync(paths.lib)
 fs.writeFileSync(dist, result.code)
 
-var distMin = path.join(paths.lib, 'react-hljs.min.js')
-var resultMin = uglify.minify(result.code, { fromString: true })
+if (argv.minify || argv.release) {
+  var uglify = require('uglify-js')
 
-fs.writeFileSync(distMin, resultMin.code)
+  var distMin = path.join(paths.lib, 'react-hljs.min.js')
+  var resultMin = uglify.minify(result.code, { fromString: true })
 
-var license = path.join(paths.root, 'LICENSE')
-var readme = path.join(paths.root, 'readme.md')
-var release = [{
-  expand: true,
-  cwd: paths.root,
-  src: [
-    path.relative(paths.root, dist),
-    path.relative(paths.root, distMin),
-    path.relative(paths.root, license),
-    path.relative(paths.root, readme)
-  ]
-}]
+  fs.writeFileSync(distMin, resultMin.code)
+}
 
-var zip = fs.createWriteStream(path.join(paths.lib, 'react-hljs.zip'))
-var zipArchive = archiver('zip')
+if (argv.release) {
+  var license = path.join(paths.root, 'LICENSE')
+  var readme = path.join(paths.root, 'readme.md')
+  var release = [{
+    expand: true,
+    cwd: paths.root,
+    src: [
+      path.relative(paths.root, dist),
+      path.relative(paths.root, distMin),
+      path.relative(paths.root, license),
+      path.relative(paths.root, readme)
+    ]
+  }]
 
-zipArchive.pipe(zip)
-zipArchive.bulk(release).finalize()
+  var zip = fs.createWriteStream(path.join(paths.lib, `react-hljs-${config.version}.zip`))
+  var zipArchive = archiver('zip')
 
-var tgz = fs.createWriteStream(path.join(paths.lib, 'react-hljs.tar.gz'))
-var tgzArchive = archiver('tar', { gzip: true })
+  zipArchive.pipe(zip)
+  zipArchive.bulk(release).finalize()
 
-tgzArchive.pipe(tgz)
-tgzArchive.bulk(release).finalize()
+  var tgz = fs.createWriteStream(path.join(paths.lib, `react-hljs-${config.version}.tar.gz`))
+  var tgzArchive = archiver('tar', { gzip: true })
+
+  tgzArchive.pipe(tgz)
+  tgzArchive.bulk(release).finalize()
+}

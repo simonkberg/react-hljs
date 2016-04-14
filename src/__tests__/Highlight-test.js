@@ -1,10 +1,8 @@
 /* eslint-env jest */
-jest.unmock('../hljs')
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import TestUtils from 'react-addons-test-utils'
-import Highlight from '../hljs'
+import Highlight from '../Highlight'
 
 describe('react-hljs', () => {
   it('should create a `pre`-node', () => {
