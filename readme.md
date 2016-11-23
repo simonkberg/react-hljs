@@ -1,3 +1,13 @@
+# DEPRECATED!
+
+**Use one of the countless alternatives instead:**
+- https://github.com/bvaughn/react-highlight.js
+- https://github.com/akiran/react-highlight
+- https://github.com/chili-labs/react-fast-highlight
+- https://github.com/DylanPiercey/Syntux
+- https://github.com/conorhastings/react-syntax-highlighter
+- + [more?](https://github.com/search?utf8=%E2%9C%93&q=react+highlight.js&type=Repositories&ref=searchresults)
+
 # react-hljs [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
 Highlight.js for React
